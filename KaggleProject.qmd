@@ -85,6 +85,7 @@ skim(df)
 | cbd_congestion_fee | Per-trip charge for MTA's Congestion Relief Zone starting Jan. 5, 2025. |
 
 # Adding Vendor Names based on Vendor Id
+
 ```{r}
 df <- df %>%
   mutate(vendor_name = case_when(
@@ -96,6 +97,21 @@ df <- df %>%
 df$vendor_name %>% head()
 ```
 
+# Adding A Payment Type Column
+
+```{r}
+df <- df %>%
+  mutate(payment_type_name = case_when(
+    payment_type == 0 ~ "Flex Fare trip",
+    payment_type == 1 ~ "Credit card",
+    payment_type == 2 ~ "Cash",
+    payment_type == 3 ~ "No charge",
+    payment_type == 4 ~ "Dispute",
+    payment_type == 5 ~ "Unknown",
+    payment_type == 6 ~ "Voided trip"
+  ))
+df$payment_type_name %>% head()
+```
 
 # Date and Time transformation
 
@@ -109,6 +125,7 @@ df %>%
 ```
 
 # Adding a day in the week column
+
 ```{r}
 df <- df %>%
   mutate(
@@ -122,13 +139,15 @@ df %>%
 ```
 
 # How many trips were during the weekend (Saturday and Sunday) and during the weekdays (Monday - Friday) percentage wise?
+
 ```{r}
 df %>%
   filter(pickup_day %in% 1:5 | dropoff_day %in% 1:5) %>%
   summarise(Mon_Fri=n() / nrow(df) * 100, Sat_Sun = 100 - Mon_Fri)
 ```
 
-Do drivers get more tips during the weekday or weekend?
+# Do drivers get more tips during the weekday or weekend?
+
 ```{r}
 df %>%
   mutate(day_type = ifelse(pickup_day %in% 1:5 & dropoff_day %in% 1:5, "Weekday", "Weekend")) %>%
@@ -137,6 +156,7 @@ df %>%
 ```
 
 # Do the tips differ between the vendors?
+
 ```{r}
 df %>%
   group_by(vendor_name) %>%
@@ -145,6 +165,7 @@ df %>%
 ```
 
 # Do the tips differ based on the number of passengers?
+
 ```{r}
 df %>%
   filter(!is.na(passenger_count)) %>%
@@ -153,9 +174,14 @@ df %>%
   arrange(desc(avg_tip))
 ```
 
+# Does the payment type affect the tip amount?
 
-
-
+```{r}
+df %>%
+  group_by(payment_type_name) %>%
+  summarise(avg_tip = mean(tip_amount), num_trips = n()) %>%
+  arrange(desc(avg_tip))
+```
 
 
 
