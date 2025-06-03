@@ -31,7 +31,8 @@ library("gt")
 library("janitor")
 library("psych")
 library("skimr")
-
+library("dplyr")
+library("tidyverse")
 ```
 
 # Read data
@@ -61,7 +62,7 @@ skim(df)
 # Column descriptions
 
 | Field Name | Description |
-|----|----|
+|------------------------------------|------------------------------------|
 | VendorID | A code indicating the TPEP provider that provided the record.<br>1 = Creative Mobile Technologies, LLC<br>2 = Curb Mobility, LLC<br>6 = Myle Technologies Inc<br>7 = Helix |
 | tpep_pickup_datetime | The date and time when the meter was engaged. |
 | tpep_dropoff_datetime | The date and time when the meter was disengaged. |
@@ -82,3 +83,31 @@ skim(df)
 | congestion_surcharge | Total amount collected in trip for NYS congestion surcharge. |
 | airport_fee | For pick up only at LaGuardia and John F. Kennedy Airports. |
 | cbd_congestion_fee | Per-trip charge for MTA's Congestion Relief Zone starting Jan. 5, 2025. |
+
+# Date and Time transformation
+
+```{r}
+df <- df %>%
+  mutate(across(c(tpep_pickup_datetime, tpep_dropoff_datetime), ymd_hms))
+
+df %>%
+  select(tpep_pickup_datetime, tpep_dropoff_datetime) %>%
+  head()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
