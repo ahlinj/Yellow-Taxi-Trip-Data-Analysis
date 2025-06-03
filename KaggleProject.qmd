@@ -121,13 +121,20 @@ df %>%
   head()
 ```
 
-# How many trips were during the weekend (Saturday and Sunday) and during the work days (Monday - Friday)?
+# How many trips were during the weekend (Saturday and Sunday) and during the weekdays (Monday - Friday) percentage wise?
 ```{r}
 df %>%
-  filter(pickup_day %in% c(1:5) | dropoff_day %in% c(1:5)) %>%
+  filter(pickup_day %in% 1:5 | dropoff_day %in% 1:5) %>%
   summarise(Mon_Fri=n() / nrow(df) * 100, Sat_Sun = 100 - Mon_Fri)
 ```
 
+Do drivers get more tips during the weekday or weekend?
+```{r}
+df %>%
+  mutate(day_type = ifelse(pickup_day %in% 1:5 & dropoff_day %in% 1:5, "Weekday", "Weekend")) %>%
+  group_by(day_type) %>%
+  summarise(avg_tip = mean(tip_amount))
+```
 
 
 
