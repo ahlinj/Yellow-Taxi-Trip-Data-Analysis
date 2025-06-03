@@ -1,0 +1,19 @@
+---
+title: "Yellow Taxi Trip Data"
+subtitle: "NYC | Taxi & Limousine Commision"
+date: "2025-06-03"
+author: "Jaka Ahlin"
+format: 
+    html:
+      toc: true
+      toc-location: left
+      toc-depth: 4
+      toc-float: true
+      embed-resources: true
+editor: visual
+execute:
+    warning: false
+    message: false
+    error: true
+---
+
