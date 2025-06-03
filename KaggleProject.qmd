@@ -95,7 +95,31 @@ df %>%
   head()
 ```
 
+# Adding a month column
+```{r}
+df <- df %>%
+  mutate(
+    pickup_month = month(tpep_pickup_datetime),
+    dropoff_month = month(tpep_dropoff_datetime)
+  )
 
+df %>%
+  select(pickup_month, dropoff_month) %>%
+  head()
+```
+
+# Adding a day in the week column
+```{r}
+df <- df %>%
+  mutate(
+    pickup_day = wday(tpep_pickup_datetime, week_start = 1),
+    dropoff_day = wday(tpep_dropoff_datetime, week_start = 1)
+  )
+
+df %>% 
+  select(pickup_day, dropoff_day) %>%
+  head()
+```
 
 
 
