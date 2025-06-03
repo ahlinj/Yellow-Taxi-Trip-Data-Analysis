@@ -84,6 +84,19 @@ skim(df)
 | airport_fee | For pick up only at LaGuardia and John F. Kennedy Airports. |
 | cbd_congestion_fee | Per-trip charge for MTA's Congestion Relief Zone starting Jan. 5, 2025. |
 
+# Adding Vendor Names based on Vendor Id
+```{r}
+df <- df %>%
+  mutate(vendor_name = case_when(
+    vendor_id == 1 ~ "Creative Mobile Technologies, LLC",
+    vendor_id == 2 ~ "Curb Mobility, LLC",
+    vendor_id == 6 ~ "Myle Technologies Inc",
+    vendor_id == 7 ~ "Helix"
+  ))
+df$vendor_name %>% head()
+```
+
+
 # Date and Time transformation
 
 ```{r}
@@ -136,6 +149,13 @@ df %>%
   summarise(avg_tip = mean(tip_amount))
 ```
 
+# Do the tips differ between the vendors?
+```{r}
+df %>%
+  group_by(vendor_name) %>%
+  summarise(avg_tip = mean(tip_amount), num_trips = n()) %>%
+  arrange(desc(avg_tip))
+```
 
 
 
