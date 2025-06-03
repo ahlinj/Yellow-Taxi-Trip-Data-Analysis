@@ -108,19 +108,6 @@ df %>%
   head()
 ```
 
-# Adding a month column
-```{r}
-df <- df %>%
-  mutate(
-    pickup_month = month(tpep_pickup_datetime),
-    dropoff_month = month(tpep_dropoff_datetime)
-  )
-
-df %>%
-  select(pickup_month, dropoff_month) %>%
-  head()
-```
-
 # Adding a day in the week column
 ```{r}
 df <- df %>%
@@ -153,6 +140,15 @@ df %>%
 ```{r}
 df %>%
   group_by(vendor_name) %>%
+  summarise(avg_tip = mean(tip_amount), num_trips = n()) %>%
+  arrange(desc(avg_tip))
+```
+
+# Do the tips differ based on the number of passengers?
+```{r}
+df %>%
+  filter(!is.na(passenger_count)) %>%
+  group_by(passenger_count) %>%
   summarise(avg_tip = mean(tip_amount), num_trips = n()) %>%
   arrange(desc(avg_tip))
 ```
