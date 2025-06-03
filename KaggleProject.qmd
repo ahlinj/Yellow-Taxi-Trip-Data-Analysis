@@ -17,3 +17,32 @@ execute:
     error: true
 ---
 
+# Introduction
+```{r}
+
+```
+
+# Load packages
+```{r}
+library(arrow)
+```
+
+# Read data
+```{r}
+df<-read_parquet("../archive/yellow_tripdata_2025-01.parquet")
+```
+
+# View data
+```{r}
+head(df)
+```
+
+
+
+
+
+
+
+
+
+
