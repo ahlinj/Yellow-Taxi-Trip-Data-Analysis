@@ -23,7 +23,9 @@ execute:
 
 ```
 
-# Load packages
+# Presentation of the Data
+
+## Load packages
 
 ```{r}
 library("arrow")
@@ -36,19 +38,19 @@ library("tidyverse")
 library("ggplot2")
 ```
 
-# Read data
+## Read data
 
 ```{r}
 df <- read_parquet("../archive/yellow_tripdata_2025-01.parquet")
 ```
 
-# Clean names
+## Clean names
 
 ```{r}
 df <- clean_names(df)
 ```
 
-# View data
+## View data
 
 ```{r}
 df %>% 
@@ -60,7 +62,7 @@ df %>%
 skim(df)
 ```
 
-# Column descriptions
+## Column descriptions
 
 | Field Name | Description |
 |------------------------------------|------------------------------------|
@@ -85,7 +87,9 @@ skim(df)
 | airport_fee | For pick up only at LaGuardia and John F. Kennedy Airports. |
 | cbd_congestion_fee | Per-trip charge for MTA's Congestion Relief Zone starting Jan. 5, 2025. |
 
-# Adding Vendor Names based on Vendor Id
+# Transformation of the Data
+
+## Adding Vendor Names based on Vendor Id
 
 ```{r}
 df <- df %>%
@@ -98,7 +102,7 @@ df <- df %>%
 df$vendor_name %>% head()
 ```
 
-# Adding A Payment Type Column
+## Adding A Payment Type Column
 
 ```{r}
 df <- df %>%
@@ -114,7 +118,7 @@ df <- df %>%
 df$payment_type_name %>% head()
 ```
 
-# Date and Time transformation
+## Date and Time transformation
 
 ```{r}
 df <- df %>%
@@ -125,7 +129,7 @@ df %>%
   head()
 ```
 
-# Adding a day in the week column
+## Adding a day in the week column
 
 ```{r}
 df <- df %>%
@@ -139,7 +143,7 @@ df %>%
   head()
 ```
 
-# How many trips were during the weekend (Saturday and Sunday) and during the weekdays (Monday - Friday) percentage wise?
+## How many trips were during the weekend (Saturday and Sunday) and during the weekdays (Monday - Friday) percentage wise?
 
 ```{r}
 df %>%
@@ -147,7 +151,7 @@ df %>%
   summarise(Mon_Fri=n() / nrow(df) * 100, Sat_Sun = 100 - Mon_Fri)
 ```
 
-# Do drivers get more tips during the weekday or weekend?
+## Do drivers get more tips during the weekday or weekend?
 
 ```{r}
 df %>%
@@ -156,7 +160,7 @@ df %>%
   summarise(avg_tip = mean(tip_amount))
 ```
 
-# Do the tips differ between the vendors?
+## Do the tips differ between the vendors?
 
 ```{r}
 df %>%
@@ -165,7 +169,7 @@ df %>%
   arrange(desc(avg_tip))
 ```
 
-# Does the payment type affect the tip amount?
+## Does the payment type affect the tip amount?
 
 ```{r}
 df %>%
@@ -174,25 +178,25 @@ df %>%
   arrange(desc(avg_tip))
 ```
 
-# Do the tips differ based on the pickup and dropoff locations?
+## Do the tips differ based on the pickup and dropoff locations?
 
 ```{r}
-pu<-df %>%
+df %>%
   group_by(pu_location_id) %>%
   summarise(pickup_tip = mean(tip_amount), num_trips = n()) %>%
   arrange(desc(pickup_tip))
 
-do<-df %>%
+
+df %>%
   group_by(do_location_id) %>%
   summarise(dropoff_tip = mean(tip_amount), num_trips = n()) %>%
   arrange(desc(dropoff_tip))
 
-pu
-do
 ```
 
+# Exploratory Data Analysis
 
-# Do the tips differ based on the number of passengers?
+## Do the tips differ based on the number of passengers?
 
 ```{r}
 df %>%
@@ -208,7 +212,8 @@ df %>%
   )
 ```
 
-# Does the trip distance affect the tip amount?
+## Does the trip distance affect the tip amount?
+
 ```{r}
 df %>%
   mutate(trip_distance = ceiling(trip_distance)) %>%
@@ -224,7 +229,7 @@ df %>%
   scale_x_discrete(breaks = seq(0, max(df$trip_distance), by = 5))
 ```
 
-# Does the dropoff hour affect the tip amount?
+## Does the dropoff hour affect the tip amount?
 
 ```{r}
 df %>%
@@ -243,6 +248,8 @@ df %>%
   )
 ```
 
+# Interpretation
 
+# References
 
 
