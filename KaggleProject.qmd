@@ -33,6 +33,7 @@ library("psych")
 library("skimr")
 library("dplyr")
 library("tidyverse")
+library("ggplot2")
 ```
 
 # Read data
@@ -183,6 +184,21 @@ df %>%
   arrange(desc(avg_tip))
 ```
 
+# Does the trip distance affect the tip amount?
+```{r}
+df %>%
+  mutate(trip_distance = ceiling(trip_distance)) %>%
+  group_by(trip_distance) %>%
+  summarise(avg_tip = mean(tip_amount), num_trips = n()) %>%
+  filter(num_trips > 1) %>%
+  arrange(desc(avg_tip)) %>%
+  ggplot(aes(x = factor(trip_distance), y = avg_tip)) +
+  geom_col(fill = "yellowgreen") +
+  labs(title = "Average Tip Amount by Trip Distance",
+       x = "Trip Distance (miles)",
+       y = "Average Tip Amount") +
+  scale_x_discrete(breaks = seq(0, max(df$trip_distance), by = 5))
+```
 
 
 
