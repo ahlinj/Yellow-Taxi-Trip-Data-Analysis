@@ -200,8 +200,24 @@ df %>%
   scale_x_discrete(breaks = seq(0, max(df$trip_distance), by = 5))
 ```
 
+# Does the dropoff hour affect the tip amount?
 
-
+```{r}
+df %>%
+  mutate(dropoff_hour = hour(tpep_dropoff_datetime)) %>%
+  filter(!is.na(dropoff_hour)) %>%
+  group_by(dropoff_hour) %>%
+  summarise(avg_tip = mean(tip_amount), num_trips = n()) %>%
+  ggplot(aes(x = dropoff_hour, y = avg_tip)) +
+  geom_line(color = "magenta", size = 1.5) +
+  geom_point() +
+  scale_x_continuous(breaks = 0:23) +
+  labs(
+    x = "Dropoff Hour",
+    y = "Average Tip Amount",
+    title = "Average Tip by Hour"
+  )
+```
 
 
 
