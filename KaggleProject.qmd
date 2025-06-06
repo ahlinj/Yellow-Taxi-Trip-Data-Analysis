@@ -171,8 +171,14 @@ df %>%
 df %>%
   filter(!is.na(passenger_count)) %>%
   group_by(passenger_count) %>%
-  summarise(avg_tip = mean(tip_amount), num_trips = n()) %>%
-  arrange(desc(avg_tip))
+  summarise(avg_tip = mean(tip_amount, na.rm = TRUE)) %>%
+  ggplot(aes(x = factor(passenger_count), y = avg_tip, group = 1)) +
+  geom_area(fill = "gold") +
+  labs(
+    title = "Average Tip by Passenger Count",
+    x = "Passenger Count",
+    y = "Average Tip Amount"
+  )
 ```
 
 # Does the payment type affect the tip amount?
@@ -183,6 +189,8 @@ df %>%
   summarise(avg_tip = mean(tip_amount), num_trips = n()) %>%
   arrange(desc(avg_tip))
 ```
+
+
 
 # Does the trip distance affect the tip amount?
 ```{r}
