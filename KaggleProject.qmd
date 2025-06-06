@@ -165,6 +165,33 @@ df %>%
   arrange(desc(avg_tip))
 ```
 
+# Does the payment type affect the tip amount?
+
+```{r}
+df %>%
+  group_by(payment_type_name) %>%
+  summarise(avg_tip = mean(tip_amount), num_trips = n()) %>%
+  arrange(desc(avg_tip))
+```
+
+# Do the tips differ based on the pickup and dropoff locations?
+
+```{r}
+pu<-df %>%
+  group_by(pu_location_id) %>%
+  summarise(pickup_tip = mean(tip_amount), num_trips = n()) %>%
+  arrange(desc(pickup_tip))
+
+do<-df %>%
+  group_by(do_location_id) %>%
+  summarise(dropoff_tip = mean(tip_amount), num_trips = n()) %>%
+  arrange(desc(dropoff_tip))
+
+pu
+do
+```
+
+
 # Do the tips differ based on the number of passengers?
 
 ```{r}
@@ -180,17 +207,6 @@ df %>%
     y = "Average Tip Amount"
   )
 ```
-
-# Does the payment type affect the tip amount?
-
-```{r}
-df %>%
-  group_by(payment_type_name) %>%
-  summarise(avg_tip = mean(tip_amount), num_trips = n()) %>%
-  arrange(desc(avg_tip))
-```
-
-
 
 # Does the trip distance affect the tip amount?
 ```{r}
