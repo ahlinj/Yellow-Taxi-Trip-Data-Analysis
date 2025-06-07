@@ -1,7 +1,7 @@
 ---
-title: "Yellow Taxi Trip Data"
+title: "Yellow Taxi Trip Data Analysis"
 subtitle: "NYC | Taxi & Limousine Commision"
-date: "2025-06-03"
+date: "2025-06-07"
 author: "Jaka Ahlin"
 format: 
     html:
@@ -19,9 +19,7 @@ execute:
 
 # Introduction
 
-```{r}
-
-```
+Using the Yellow Taxi Trip Data I will analyze how different aspects of the trip affect the tip amount. Let's see if the day of the week, trip distance, pickup and dropoff locations, dropoff hour, payment type, vendor, number of passengers and other aspects influence the tips given to drivers.
 
 # Presentation of the Data
 
