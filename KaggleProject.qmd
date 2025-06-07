@@ -89,6 +89,8 @@ skim(df)
 
 ## Adding Vendor Names based on Vendor Id
 
+Let's add vendor names based on the vendor id. These names will be used later.
+
 ```{r}
 df <- df %>%
   mutate(vendor_name = case_when(
@@ -97,10 +99,13 @@ df <- df %>%
     vendor_id == 6 ~ "Myle Technologies Inc",
     vendor_id == 7 ~ "Helix"
   ))
+
 df$vendor_name %>% head()
 ```
 
 ## Adding A Payment Type Column
+
+Let's add payment type name based on the payment type id. These names will be used later.
 
 ```{r}
 df <- df %>%
@@ -113,10 +118,13 @@ df <- df %>%
     payment_type == 5 ~ "Unknown",
     payment_type == 6 ~ "Voided trip"
   ))
+
 df$payment_type_name %>% head()
 ```
 
 ## Date and Time transformation
+
+Transforming the time from POSIXct to date-time format using lubridate package.
 
 ```{r}
 df <- df %>%
@@ -128,6 +136,8 @@ df %>%
 ```
 
 ## Adding a day in the week column
+
+It's important to know the day of the week the trip was made to better understand the data and later it will help to analyze the tips.
 
 ```{r}
 df <- df %>%
@@ -143,6 +153,8 @@ df %>%
 
 ## How many trips were during the weekend (Saturday and Sunday) and during the weekdays (Monday - Friday) percentage wise?
 
+In the table below is shown the percentage of trips made during the weekdays and weekends.
+
 ```{r}
 df %>%
   filter(pickup_day %in% 1:5 | dropoff_day %in% 1:5) %>%
@@ -150,6 +162,8 @@ df %>%
 ```
 
 ## Do drivers get more tips during the weekday or weekend?
+
+Surprisingly, drivers got more tips during the weekdays rather than the weekends, which can be seen from the average tip amount in the table below.
 
 ```{r}
 df %>%
@@ -160,6 +174,8 @@ df %>%
 
 ## Do the tips differ between the vendors?
 
+There are four different vendors in the dataset with two of them having the most amount of trips and also similar average tip amounts. While Helix has the highest average tip, it has a small amount of trips compared to the other vendors, which could skew the results. Similar problem we can see with the Myle Technologies Inc vendor.
+
 ```{r}
 df %>%
   group_by(vendor_name) %>%
@@ -169,6 +185,8 @@ df %>%
 
 ## Does the payment type affect the tip amount?
 
+The tip amount only gets automatically populated for credit card payments. Cash tips are not included.
+
 ```{r}
 df %>%
   group_by(payment_type_name) %>%
@@ -177,6 +195,8 @@ df %>%
 ```
 
 ## Do the tips differ based on the pickup and dropoff locations?
+
+Trips starting or ending in some locations tend to have higher average tips than others, which can be seen from the table below. It is also important to note the number of trips in each location, as some locations have a very small number of trips, which can skew the results.
 
 ```{r}
 df %>%
@@ -196,21 +216,30 @@ df %>%
 
 ## Do the tips differ based on the number of passengers?
 
+The table is included to show the number of trips for each passenger count, from which we can see that for 7, 8 or 9 passengers there are very few trips, which can skew the results.
+
 ```{r}
 df %>%
   filter(!is.na(passenger_count)) %>%
   group_by(passenger_count) %>%
-  summarise(avg_tip = mean(tip_amount, na.rm = TRUE)) %>%
+  summarise(avg_tip = mean(tip_amount), num_trips = n())
+
+df %>%
+  filter(!is.na(passenger_count)) %>%
+  group_by(passenger_count) %>%
+  summarise(avg_tip = mean(tip_amount)) %>%
   ggplot(aes(x = factor(passenger_count), y = avg_tip, group = 1)) +
   geom_area(fill = "gold") +
   labs(
-    title = "Average Tip by Passenger Count",
-    x = "Passenger Count",
+    title = "Average Tip by Number of Passengers",
+    x = "Number of Passengers",
     y = "Average Tip Amount"
   )
 ```
 
 ## Does the trip distance affect the tip amount?
+
+The average tip amount increases with the trip distance, but the number of trips decreases as the trip distance increases, which can skew the results in the second half of the graph.
 
 ```{r}
 df %>%
@@ -218,7 +247,6 @@ df %>%
   group_by(trip_distance) %>%
   summarise(avg_tip = mean(tip_amount), num_trips = n()) %>%
   filter(num_trips > 1) %>%
-  arrange(desc(avg_tip)) %>%
   ggplot(aes(x = factor(trip_distance), y = avg_tip)) +
   geom_col(fill = "yellowgreen") +
   labs(title = "Average Tip Amount by Trip Distance",
@@ -228,6 +256,8 @@ df %>%
 ```
 
 ## Does the dropoff hour affect the tip amount?
+
+This line chart nicely presents us the average tip amount by the dropoff hour. We can see that the average tip amount is highest during the late evening hours.
 
 ```{r}
 df %>%
